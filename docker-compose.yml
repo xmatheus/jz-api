@@ -1,0 +1,37 @@
+version: '3'
+services:
+    postgres:
+        image: postgres:latest
+        container_name: postgres-jazida
+        restart: always
+        ports:
+            - "5432:5432"
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "10m"
+                max-file: "5"
+    api:
+        build:
+            context: ./
+            dockerfile: Dockerfile
+        container_name: pokemon_api
+        restart: always
+        volumes:
+            - .:/usr/app
+        working_dir: /usr/app
+        command: [ "npm", "run", "start" ]
+        depends_on:
+            - postgres
+        ports:
+            - "3001:3001"
+        environment:
+            DATABASE_URL: ${DATABASE_URL_DOCKER}
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "10m"
+                max-file: "5"
