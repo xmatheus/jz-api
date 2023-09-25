@@ -18,17 +18,19 @@ services:
     api:
         build:
             context: ./
-            dockerfile: Dockerfile
+            dockerfile: Dockerfile.dev
         container_name: pokemon_api
         restart: always
-        command: [ "npm", "run", "start:migrate:prod" ]
+        command: [ "npm", "run", "dev" ]
         depends_on:
             - postgres
         ports:
             - "3001:3001"
         environment:
             DATABASE_URL: "postgresql://matheus:matheus@postgres:5432/pokemon_db?schema=public"
-            NODE_ENV: "production"
+            NODE_ENV: "development"
+        volumes:
+            - ./:/usr/app
         logging:
             driver: "json-file"
             options:
