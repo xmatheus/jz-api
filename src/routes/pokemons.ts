@@ -1,27 +1,56 @@
 import { PrismaClient } from "@prisma/client";
 import { Router } from "express";
-import { STATUS_CODE } from "../middlewares/error-handler";
-
-const prisma = new PrismaClient({
-  log: process.env.NODE_ENV === "development" ? ["query"] : ["error"],
-});
+import { STATUS_CODE } from "../utils/status-code";
+import { Pokemon } from "../services/Pokemos";
+import { PrismaPokemonsRepository } from "../repositories/prisma/PrismaPokemonsRepository";
 
 const router = Router();
 
 router.post("/pokemons", async (req, res) => {
-  const { tipo, treinador } = req.body;
+    const { tipo, treinador } = req.body;
 
-  if (!tipo || !treinador) {
-    return res.status(STATUS_CODE.BAD_REQUEST).json({ msg: "missing params" });
-  }
+    const prismaPokemonRepository = new PrismaPokemonsRepository();
+    const pokemon = new Pokemon(prismaPokemonRepository);
 
-  const pokemon = await prisma.pokemon.create({
-    data: {
-      tipo,
-      treinador,
-    },
-  });
-  res.json(pokemon);
+    try {
+        const createdPokemon = await pokemon.create({ tipo, treinador });
+
+        res.json(createdPokemon);
+    } catch (error) {
+        console.log(error);
+        res.status(STATUS_CODE.BAD_REQUEST).send({msg: "pokemon not created"});
+    }
+});
+
+router.put("/pokemons/:id", async (req, res) => {
+    const { id } = req.params;
+    const { treinador } = req.body;
+    const numericId = Number(id);
+
+    const prismaPokemonRepository = new PrismaPokemonsRepository();
+    const pokemon = new Pokemon(prismaPokemonRepository);
+
+    try {
+        await pokemon.update({ id: numericId, treinador });
+        res.send(STATUS_CODE.NO_CONTENT);
+    } catch (error) {
+        res.status(STATUS_CODE.BAD_REQUEST).send({msg: "pokemon not updated"});
+    }
+});
+
+router.get("/pokemons/:id", async (req, res) => {
+    const { id } = req.params;
+    const numericId = Number(id);
+
+    const prismaPokemonRepository = new PrismaPokemonsRepository();
+    const pokemon = new Pokemon(prismaPokemonRepository);
+
+    try {
+        const data = await pokemon.get({ id: numericId });
+        res.send(data);
+    } catch (error) {
+        res.status(STATUS_CODE.BAD_REQUEST).send({msg: "pokemon not found"});
+    }
 });
 
 export default router;
