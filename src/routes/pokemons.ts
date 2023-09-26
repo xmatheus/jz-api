@@ -1,4 +1,3 @@
-import { PrismaClient } from "@prisma/client";
 import { Router } from "express";
 import { STATUS_CODE } from "../utils/status-code";
 import { Pokemon } from "../services/Pokemos";

@@ -1,10 +1,10 @@
-import type { Config } from "@jest/types";
 import { exec } from "node:child_process";
 import dotenv from "dotenv";
 import NodeEnvironment from "jest-environment-node";
 import { Client } from "pg";
 import util from "node:util";
 import crypto from "node:crypto";
+import { JestEnvironmentConfig, EnvironmentContext } from "@jest/environment";
 
 dotenv.config({ path: ".env.testing" });
 
@@ -16,7 +16,7 @@ export default class PrismaTestEnvironment extends NodeEnvironment {
     private schema: string;
     private connectionString: string;
 
-    constructor(config: any, context: any) {
+    constructor(config: JestEnvironmentConfig, context: EnvironmentContext) {
         super(config, context);
 
         const dbUser = process.env.DATABASE_USER;
