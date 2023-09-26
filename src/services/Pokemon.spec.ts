@@ -23,7 +23,7 @@ describe("Pokemon", () => {
         );
     });
 
-    it("shoud not be able to create a new pokemon with invalid tipo", async () => {
+    it("shoud not be able to create a new pokemon with invalid 'tipo'", async () => {
         const inMemoryPokemonsRepository = new InMemoryPokemonsRepository();
         const pokemon = new Pokemon(inMemoryPokemonsRepository);
         const expectedData = {
@@ -39,7 +39,7 @@ describe("Pokemon", () => {
     });
 });
 
-describe("UpdatePokemon", () => {
+describe("UpdatePokemons", () => {
     it("shoud be able to update pokemon", async () => {
         const inMemoryPokemonsRepository = new InMemoryPokemonsRepository();
         const pokemon = new Pokemon(inMemoryPokemonsRepository);
@@ -71,12 +71,10 @@ describe("UpdatePokemon", () => {
         } as UpdatePokemonsData;
 
         await expect(pokemon.update(data)).rejects.toThrow();
-
     });
-
 });
 
-describe("GetPokemon", () => {
+describe("GetPokemons", () => {
     it("shoud be able to get a pokemon", async () => {
         const inMemoryPokemonsRepository = new InMemoryPokemonsRepository();
         const pokemon = new Pokemon(inMemoryPokemonsRepository);
@@ -86,7 +84,7 @@ describe("GetPokemon", () => {
         } as CreatePokemonsRequest;
 
         const createdPokemon = await pokemon.create(newPokemon);
-        const foundPokemon = await pokemon.get({id: createdPokemon.id});
+        const foundPokemon = await pokemon.get({ id: createdPokemon.id });
 
         expect(foundPokemon).toEqual(createdPokemon);
     });
@@ -100,8 +98,61 @@ describe("GetPokemon", () => {
         } as CreatePokemonsRequest;
 
         await pokemon.create(newPokemon);
-        const foundPokemon = await pokemon.get({id: 99999});
+        const foundPokemon = await pokemon.get({ id: 99999 });
 
         expect(foundPokemon).toEqual(null);
+    });
+});
+
+describe("DeletePokemons", () => {
+    it("shoud be able to delete a pokemon", async () => {
+        const inMemoryPokemonsRepository = new InMemoryPokemonsRepository();
+        const pokemon = new Pokemon(inMemoryPokemonsRepository);
+        const newPokemon = {
+            tipo: "charizard",
+            treinador: "junin",
+        } as CreatePokemonsRequest;
+
+        const createdPokemon = await pokemon.create(newPokemon);
+        await pokemon.delete({ id: createdPokemon.id });
+
+        expect(inMemoryPokemonsRepository.pokemons).toEqual([]);
+    });
+
+    it("shoud not be able to delete a pokemon", async () => {
+        const inMemoryPokemonsRepository = new InMemoryPokemonsRepository();
+        const pokemon = new Pokemon(inMemoryPokemonsRepository);
+        const newPokemon = {
+            tipo: "charizard",
+            treinador: "junin",
+        } as CreatePokemonsRequest;
+
+        const createdPokemon = await pokemon.create(newPokemon);
+        await pokemon.delete({ id: 999999 });
+
+        expect(inMemoryPokemonsRepository.pokemons).toEqual(
+            expect.arrayContaining([expect.objectContaining(createdPokemon)])
+        );
+    });
+});
+
+describe("ListPokemons", () => {
+    it("shoud be able to list pokemons", async () => {
+        const inMemoryPokemonsRepository = new InMemoryPokemonsRepository();
+        const pokemon = new Pokemon(inMemoryPokemonsRepository);
+        const newPokemon = {
+            tipo: "charizard",
+            treinador: "junin",
+        } as CreatePokemonsRequest;
+
+        await pokemon.create(newPokemon);
+        const createdPokemon = await pokemon.create(newPokemon);
+        await pokemon.create(newPokemon);
+        await pokemon.create(newPokemon);
+
+        expect(inMemoryPokemonsRepository.pokemons).toHaveLength(4);
+        expect(inMemoryPokemonsRepository.pokemons).toEqual(
+            expect.arrayContaining([expect.objectContaining(createdPokemon)])
+        );
     });
 });

@@ -37,10 +37,7 @@ describe("[e2e] pokemon", () => {
     });
 
     it("shoud not be able update a pokemon", async () => {
-
-        const updateResponse = await request(app)
-            .put("/pokemons/999")
-            .send();
+        const updateResponse = await request(app).put("/pokemons/999").send();
 
         expect(updateResponse.status).toBe(400);
     });
@@ -48,18 +45,57 @@ describe("[e2e] pokemon", () => {
     it("shoud be able get a pokemon", async () => {
         const response = await request(app)
             .post("/pokemons")
-            .send({ tipo: "pikachu", treinador: "ash", });
+            .send({ tipo: "pikachu", treinador: "ash" });
 
         expect(response.status).toBe(200);
 
         const { body } = response;
 
-        const updateResponse = await request(app)
+        const getResponse = await request(app)
             .get(`/pokemons/${body.id}`)
             .send();
 
-        expect(updateResponse.status).toBe(200);
-        expect(updateResponse.body.nivel).toBeDefined();
-        expect(updateResponse.body.id).toBeDefined();
+        expect(getResponse.status).toBe(200);
+        expect(getResponse.body.nivel).toBeDefined();
+        expect(getResponse.body.id).toBeDefined();
+    });
+
+    it("shoud be able to delete a pokemon", async () => {
+        const response = await request(app)
+            .post("/pokemons")
+            .send({ tipo: "pikachu", treinador: "ash" });
+
+        expect(response.status).toBe(200);
+
+        const { body } = response;
+
+        const deleteResponse = await request(app)
+            .delete(`/pokemons/${body.id}`)
+            .send();
+
+        const getResponse = await request(app)
+            .get(`/pokemons/${body.id}`)
+            .send();
+
+        expect(deleteResponse.status).toBe(204);
+        expect(deleteResponse.body).toStrictEqual({});
+
+        expect(getResponse.status).toBe(200);
+        expect(getResponse.body).toStrictEqual({});
+    });
+
+    it("shoud not be able to delete a pokemon", async () => {
+        const deleteResponse = await request(app)
+            .delete(`/pokemons/99999`)
+            .send();
+
+        expect(deleteResponse.status).toBe(400);
+    });
+
+    it("shoud be able to list all pokemons", async () => {
+        const response = await request(app).get(`/pokemons`).send();
+
+        expect(response.status).toBe(200);
+        expect(response.body).toBeDefined();
     });
 });

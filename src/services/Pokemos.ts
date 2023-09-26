@@ -15,6 +15,9 @@ export interface UpdatePokemonsRequest {
 export interface GetPokemonsRequest {
     id: number;
 }
+export interface DeletePokemonsRequest {
+    id: number;
+}
 
 const pokemonTypes: PokemonType[] = ["charizard", "mewtwo", "pikachu"];
 
@@ -52,5 +55,17 @@ export class Pokemon {
 
         const pokemon = await this.pokemonsRepository.get({ id });
         return pokemon;
+    }
+
+    async delete({ id }: DeletePokemonsRequest) {
+        if (!id) {
+            throw new Error("Missing 'id'");
+        }
+
+        await this.pokemonsRepository.delete({ id });
+    }
+
+    async list() {
+        return await this.pokemonsRepository.list();
     }
 }

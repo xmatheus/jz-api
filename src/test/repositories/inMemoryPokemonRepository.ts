@@ -23,12 +23,21 @@ export class InMemoryPokemonsRepository implements PokemonsRepository {
 
     async update(data: UpdatePokemonsData) {
         const pokemon = this.pokemons.find((item) => item.id === data.id);
-        if (!pokemon) { return; }
+        if (!pokemon) {
+            return;
+        }
         pokemon.treinador = data.treinador;
     }
 
     async get(data: UpdatePokemonsData) {
         const pokemon = this.pokemons.find((item) => item.id === data.id);
         return pokemon || null;
+    }
+
+    async delete(data: UpdatePokemonsData) {
+        this.pokemons = this.pokemons.filter((item) => item.id !== data.id);
+    }
+    async list() {
+        return this.pokemons;
     }
 }

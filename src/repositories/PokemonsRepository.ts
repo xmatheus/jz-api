@@ -14,6 +14,10 @@ export interface GetPokemonsData {
   id: number;
 }
 
+export interface DeletePokemons {
+  id: number;
+}
+
 export interface PokemonsDataOutput {
   tipo: PokemonType;
   treinador: string;
@@ -25,4 +29,6 @@ export interface PokemonsRepository {
     create(data: CreatePokemonsData): Promise<PokemonsDataOutput>
     update(data: UpdatePokemonsData): Promise<void>
     get(data: GetPokemonsData): Promise<PokemonsDataOutput | null>
+    delete(data: DeletePokemons): Promise<void>
+    list(): Promise<PokemonsDataOutput[]>
 }

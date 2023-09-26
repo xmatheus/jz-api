@@ -26,6 +26,17 @@ export class PrismaPokemonsRepository implements PokemonsRepository {
             where: { id },
         });
 
-        return pokemon
+        return pokemon;
+    }
+
+    async delete(data: GetPokemonsData) {
+        const { id } = data;
+        await prisma.pokemon.delete({
+            where: { id },
+        });
+    }
+
+    async list() {
+        return await prisma.pokemon.findMany();
     }
 }
