@@ -32,7 +32,7 @@ router.put("/pokemons/:id", async (req, res) => {
     try {
         await pokemonService.update({ id: numericId, treinador });
 
-        res.send(STATUS_CODE.NO_CONTENT);
+        res.sendStatus(STATUS_CODE.NO_CONTENT);
     } catch (error) {
         res.status(STATUS_CODE.BAD_REQUEST).send({msg: "pokemon not updated"});
     }
@@ -63,7 +63,7 @@ router.delete("/pokemons/:id", async (req, res) => {
 
     try {
         await pokemonService.delete({ id: numericId });
-        res.send(STATUS_CODE.NO_CONTENT);
+        res.sendStatus(STATUS_CODE.NO_CONTENT);
     } catch (error) {
         res.status(STATUS_CODE.BAD_REQUEST).send({msg: "pokemon has not been excluded"});
     }
