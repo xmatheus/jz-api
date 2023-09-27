@@ -99,7 +99,6 @@ router.post("/pokemons/battle", async (req, res) => {
     try {
         const { winner, loser } = await pokemonService.battle({ id1: numericId1, id2: numericId2 });
 
-
         res.json({
             vencedor: winner,
             perdedor: loser,
