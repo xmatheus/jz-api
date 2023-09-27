@@ -11,7 +11,7 @@
     "start": "npm run clean:build && npm run build && node ./build/src/",
     "start:prod": "node ./build/src",
     "start:migrate:prod": "prisma migrate deploy && npm run start:prod",
-    "dev": "ts-node-dev --exit-child -r dotenv/config src/index",
+    "dev": "prisma migrate dev && ts-node-dev --exit-child -r dotenv/config src/index",
     "test": "jest",
     "test:e2e": "jest --config jest-e2e.config.ts",
     "prepare": "husky install",
