@@ -103,6 +103,9 @@ npm run test:e2e
 
 ## Endpoints
 
+Obs.: a documentação também está disponível no modo "development" quando executado o **make up-dev**
+
+Através da rota **/doc** com o swagger.
 ### `POST /pokemons`
 
 Cria um novo pokemon.
