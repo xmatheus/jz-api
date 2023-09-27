@@ -98,4 +98,29 @@ describe("[e2e] pokemon", () => {
         expect(response.status).toBe(200);
         expect(response.body).toBeDefined();
     });
+
+    it("should be able to perform a pokemon battle", async () => {
+        const response1 = await request(app)
+            .post("/pokemons")
+            .send({ tipo: "pikachu", treinador: "ash" });
+
+        const response2 = await request(app)
+            .post("/pokemons")
+            .send({ tipo: "charizard", treinador: "misty" });
+
+        expect(response1.status).toBe(200);
+        expect(response2.status).toBe(200);
+
+        const { id: id1 } = response1.body;
+        const { id: id2 } = response2.body;
+
+        // Perform the battle
+        const battleResponse = await request(app)
+            .post("/battle")
+            .send({ id1, id2 });
+
+        expect(battleResponse.status).toBe(200);
+        expect(battleResponse.body.vencedor).toBeDefined();
+        expect(battleResponse.body.perdedor).toBeDefined();
+    });
 });

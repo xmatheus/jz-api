@@ -3,7 +3,7 @@ import {
     CreatePokemonsData,
     GetPokemonsData,
     PokemonsRepository,
-    UpdatePokemonsData,
+    UpdatePokemonsData
 } from "../PokemonsRepository";
 
 export class PrismaPokemonsRepository implements PokemonsRepository {
@@ -12,18 +12,19 @@ export class PrismaPokemonsRepository implements PokemonsRepository {
         return pokemon;
     }
 
-    async update(data: UpdatePokemonsData) {
-        const { id, treinador } = data;
+    async update(data: Partial<UpdatePokemonsData>) {
+        const { id } = data;
+        delete data.id;
         await prisma.pokemon.update({
             where: { id },
-            data: { treinador },
+            data,
         });
     }
 
     async get(data: GetPokemonsData) {
         const { id } = data;
         const pokemon = await prisma.pokemon.findFirst({
-            where: { id },
+            where: { id }
         });
 
         return pokemon;
@@ -32,7 +33,7 @@ export class PrismaPokemonsRepository implements PokemonsRepository {
     async delete(data: GetPokemonsData) {
         const { id } = data;
         await prisma.pokemon.delete({
-            where: { id },
+            where: { id }
         });
     }
 

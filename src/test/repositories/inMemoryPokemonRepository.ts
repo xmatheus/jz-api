@@ -27,6 +27,7 @@ export class InMemoryPokemonsRepository implements PokemonsRepository {
             return;
         }
         pokemon.treinador = data.treinador;
+        pokemon.nivel = data.nivel || pokemon.nivel;
     }
 
     async get(data: UpdatePokemonsData) {

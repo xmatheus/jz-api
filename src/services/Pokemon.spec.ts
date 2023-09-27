@@ -156,3 +156,31 @@ describe("ListPokemons", () => {
         );
     });
 });
+
+describe("BattlePokemons", () => {
+    it("should be able to perform a pokemon battle", async () => {
+        const inMemoryPokemonsRepository = new InMemoryPokemonsRepository();
+        const pokemon = new Pokemon(inMemoryPokemonsRepository);
+
+        const pokemon1Data = {
+            tipo: "charizard",
+            treinador: "ash",
+        } as CreatePokemonsRequest;
+
+        const pokemon2Data = {
+            tipo: "pikachu",
+            treinador: "misty",
+        } as CreatePokemonsRequest;
+
+        const pokemon1 = await pokemon.create(pokemon1Data);
+        const pokemon2 = await pokemon.create(pokemon2Data);
+
+        const battleResult = await pokemon.battle({ id1: pokemon1.id, id2: pokemon2.id });
+
+        expect(battleResult.winner).toBeDefined();
+        expect(battleResult.loser).toBeDefined();
+
+        const loserExists = await pokemon.get({ id: battleResult.loser.id});
+        expect(loserExists).toBeNull();
+    });
+});
