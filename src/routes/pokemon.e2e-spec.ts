@@ -116,7 +116,7 @@ describe("[e2e] pokemon", () => {
 
         // Perform the battle
         const battleResponse = await request(app)
-            .post("/battle")
+            .post("/pokemons/battle")
             .send({ id1, id2 });
 
         expect(battleResponse.status).toBe(200);
