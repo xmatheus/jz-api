@@ -38,6 +38,10 @@ POSTGRES_PASSWORD="matheus"
 
 Por comodidade de executar as migrations fora do banco no docker, os envs no docker-compose foram setados, mas caso seja necessário mudar: apenas é necessário importar com ${var}.
 
+## DX -> Developer experience
+
+Antes de cada commit, os testes unitários e o lint são executados utilizando o [Husky](https://www.npmjs.com/package/husky). Isso garante a detecção precoce de erros, mantendo nossa base de código limpa e eficiente.
+
 ## Como Executar a Aplicação
 
 Para executar a aplicação, você pode usar o `Makefile` fornecido.
